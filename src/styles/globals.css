@@ -1,0 +1,120 @@
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+
+:root {
+  --Foundation-White-Light: #ffffff;
+  --White-50: #fafafa;
+  --White-100: #efefef;
+  --Foundation-Blue-Light: #eaebee;
+  --Foundation-Blue-Normal: #2a3653;
+  --Foundation-Grey-Normal: #3b3b3b;
+  --Foundation-Grey-Darker: #151515;
+  /* Brand greens — overridden at runtime by BrandThemeVariables from brandTheme.ts */
+  --Foundation-Green-medium: #27a376;
+  --Foundation-Green-Dark: #1d7a59;
+  --color-brand: #27a376;
+  --color-brand-hover: #1d7a59;
+  --Shark-50: #f5f5f5;
+  --Shark-100: #e7e7e7;
+  --Shark-200: #d1d1d1;
+  --Shark-300: #b0b0b0;
+  --Shark-400: #888888;
+  --Shark-500: #6d6d6d;
+  --Shark-600: #5d5d5d;
+  --Shark-700: #4f4f4f;
+  --Shark-750: #4e4e43;
+  --Shark-800: #454545;
+  --Shark-900: #3d3d3d;
+  --Shark-950: #1f1f1f;
+  --app-font-family: var(--font-figtree), Arial, Helvetica, sans-serif;
+  --font-inter: var(--app-font-family);
+  --app-surface: #ffffff;
+  --app-muted-surface: #f8fafc;
+}
+
+.dark {
+  --Foundation-White-Light: #0f172a;
+  --White-50: #1e293b;
+  --White-100: #334155;
+  --Foundation-Blue-Light: #cbd5e1;
+  --Foundation-Grey-Darker: #f1f5f9;
+  --Foundation-Grey-Normal: #cbd5e1;
+  --Shark-50: #1e293b;
+  --Shark-100: #334155;
+  --Shark-200: #475569;
+  --Shark-300: #64748b;
+  --Shark-400: #94a3b8;
+  --Shark-700: #cbd5e1;
+  --Shark-950: #f8fafc;
+  --app-surface: #1e293b;
+  --app-muted-surface: #0f172a;
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-800 font-sans antialiased dark:bg-slate-950 dark:text-slate-100 transition-colors;
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand, var(--Foundation-Green-medium));
+    outline-offset: 2px;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-slate-100 dark:bg-slate-900;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-700 dark:bg-slate-600 rounded;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-600 dark:bg-slate-500;
+  }
+}
+
+@layer utilities {
+  .container-x {
+    @apply max-w-container w-full mx-auto;
+  }
+
+  .text-elegant {
+    @apply text-slate-800 dark:text-slate-100;
+  }
+
+  .text-muted {
+    @apply text-slate-400 dark:text-slate-400;
+  }
+
+  .btn-primary {
+    @apply w-full py-3 rounded-lg bg-slate-900 text-white font-medium hover:bg-slate-800 disabled:opacity-50 transition-colors dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 rounded-lg border border-slate-300 text-slate-800 font-medium hover:bg-slate-50 transition-colors dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-800;
+  }
+
+  .btn-link {
+    @apply text-blue-600 hover:underline dark:text-blue-400;
+  }
+
+  .auth-shell {
+    @apply min-h-screen flex items-center justify-center px-4 py-12 bg-slate-100 dark:bg-slate-950;
+  }
+
+  .auth-card {
+    @apply w-full max-w-md bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-8;
+  }
+}
