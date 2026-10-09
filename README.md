@@ -79,6 +79,10 @@ bun dev                # http://localhost:5173
 
 Other scripts: `bun run build`, `bun start`, `bun run lint`.
 
+## Deploy
+
+Bun installs and builds. PM2 serves the app from `ecosystem.config.cjs` (process name `nextjs-frontend`; `.cjs` because this package is `"type": "module"`). The listen port is `HOST_FORWARD_APP_PORT` in the server `.env` (for example **3000**), the same name Django uses. `NODE_ENV=production` belongs in that file too. The deploy loads `.env` before PM2, and PM2 passes the file to Next with `env_file`. PM2 refuses to start if `HOST_FORWARD_APP_PORT` is missing. Point the deployer nginx upstream at `http://127.0.0.1:<HOST_FORWARD_APP_PORT>`. If staging shares a VPS, change `HOST_FORWARD_APP_PORT` in the staging server `.env` and set that upstream to the same port.
+
 **React 19 + Ant Design 5:** the official compatibility patch [`@ant-design/v5-patch-for-react-19`](https://github.com/ant-design/v5-patch-for-react-19) is imported in `src/providers/AntdRegistry.tsx` (load before any `antd` components).
 
 ## Environment

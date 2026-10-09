@@ -1,0 +1,74 @@
+# Process name is nextjs-frontend. HOST_FORWARD_APP_PORT and NODE_ENV are required in the server .env.
+# On a shared VPS, change that port on the staging branch and set this deployment's
+# nginx upstream to the same port.
+
+name: Deploy Staging
+
+on:
+  push:
+    branches:
+      - staging
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-staging-${{ github.repository }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy Next.js App
+    runs-on: ubuntu-latest
+    environment: Staging
+    timeout-minutes: 30
+
+    steps:
+      - name: Deploy Next.js app to server
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.STAGING_REMOTE_HOST }}
+          username: ${{ secrets.STAGING_REMOTE_USER }}
+          key: ${{ secrets.STAGING_REMOTE_SSH_KEY }}
+          command_timeout: 30m
+          script_stop: true
+          script: |
+            set -euo pipefail
+
+            echo "🚀 [1/5] Setting up environment..."
+            export PATH="$HOME/.bun/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
+
+            if ! command -v bun &> /dev/null; then
+              echo "⚠️ Bun not found on server. Installing Bun..."
+              curl -fsSL https://bun.sh/install | bash
+              export PATH="$HOME/.bun/bin:$PATH"
+            fi
+
+            if ! command -v pm2 &> /dev/null; then
+              echo "⚠️ PM2 not found on server. Installing PM2..."
+              bun install -g pm2
+            fi
+
+            echo "📌 Using Bun version: $(bun --version)"
+            echo "📌 Using PM2 version: $(pm2 --version)"
+
+            echo "📂 [2/5] Updating source code..."
+            cd "${{ secrets.STAGING_REMOTE_PATH }}"
+            git fetch origin staging --prune
+            git reset --hard origin/staging
+
+            echo "🔒 [3/5] Checking lockfile & installing dependencies..."
+            bun install --frozen-lockfile
+
+            echo "🏗️ [4/5] Building Next.js app..."
+            NODE_OPTIONS="--max-old-space-size=4096" bun run build
+
+            echo "🔄 [5/5] Reloading PM2..."
+            set -a
+            . ./.env
+            set +a
+            pm2 startOrReload ecosystem.config.cjs --update-env
+            pm2 save
+
+            echo "✅ Deployment successful"
