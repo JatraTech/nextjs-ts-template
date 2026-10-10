@@ -13,7 +13,7 @@ export const siteConfig = {
     "Production-ready Next.js starter with Ant Design, TanStack Query, and shared UI patterns.",
   /** Canonical site origin — no trailing slash */
   url: trimTrailingSlash(
-    process.env.NEXT_PUBLIC_SITE_URL?.trim() || "http://localhost:5173",
+    process.env.NEXT_PUBLIC_SITE_URL?.trim() || "http://localhost:3000",
   ),
   locale: process.env.NEXT_PUBLIC_SITE_LOCALE?.trim() || "en_US",
   language: process.env.NEXT_PUBLIC_SITE_LANGUAGE?.trim() || "en",

@@ -74,7 +74,7 @@ After tailoring, run install and dev:
 ```bash
 bun install
 cp .env.example .env   # set NEXT_PUBLIC_API_URL and SEO/site vars for production
-bun dev                # http://localhost:5173
+bun dev                # http://localhost:3000
 ```
 
 Other scripts: `bun run build`, `bun start`, `bun run lint`.
